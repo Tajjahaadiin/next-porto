@@ -5,6 +5,7 @@ import {
   boolean,
   timestamp,
   text,
+  serial,
 } from 'drizzle-orm/pg-core'
 
 export const profileTable = pgTable('profile', {
@@ -22,3 +23,10 @@ export const profileTable = pgTable('profile', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
+export const technologies = pgTable('technologies', {
+  id: serial('id').primaryKey(),
+  techName: varchar('techName', { length: 255 }).notNull(),
+  imageUrl: text('imageUrl').notNull(),
+})
+export type Technology = typeof technologies.$inferSelect // Type for selecting data
+export type NewTechnology = typeof technologies.$inferInsert // Type for inserting data
