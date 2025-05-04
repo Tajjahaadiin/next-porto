@@ -1,6 +1,6 @@
 {
-  "id": "5281be22-cacc-4c97-b67f-452ea775992b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "322183cd-95ee-42c0-819c-16d6cf789624",
+  "prevId": "f77efc53-e412-4127-94c8-eca07966b118",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -243,6 +243,47 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.table": {
+      "name": "table",
+      "schema": "",
+      "columns": {
+        "mood": {
+          "name": "mood",
+          "type": "mood",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "testArray": {
+          "name": "testArray",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::varchar[]"
+        },
+        "tags1": {
+          "name": "tags1",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "tags2": {
+          "name": "tags2",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.technologies": {
       "name": "technologies",
       "schema": "",
@@ -275,7 +316,17 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.mood": {
+      "name": "mood",
+      "schema": "public",
+      "values": [
+        "sad",
+        "ok",
+        "happy"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

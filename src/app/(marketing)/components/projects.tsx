@@ -1,53 +1,72 @@
-import { ExternalLink, Github } from "lucide-react";
-interface Projects {
-  image: string;
-  projectName: string;
-  description: string;
-  techStack: string[];
-  link: string;
-  isPrivate: boolean;
-}
+'use client'
+import Spinner from '@/components/spinner'
+import { useGetProject } from '@/hooks/use-projects'
+import { ExternalLink, Github } from 'lucide-react'
+// interface Projects {
+//   image: string
+//   projectName: string
+//   description: string
+//   techStack: string[]
+//   link: string
+//   isPrivate: boolean
+// }
 
-const projects: Projects[] = [
-  {
-    image: "dummy-profile.jpg",
-    projectName: "Lorem Ipsum",
-    description:
-      "Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.",
-    techStack: ["Next.js", "TypeScript", "Node.js", "Tailwind"],
-    link: "https://example.com",
-    isPrivate: true,
-  },
-  {
-    image: "dummy-profile.jpg",
-    projectName: "Lorem Ipsum2",
-    description:
-      "Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.",
-    techStack: ["Next.js", "TypeScript", "Node.js", "Tailwind"],
-    link: "https://example.com",
-    isPrivate: false,
-  },
-  {
-    image: "dummy-profile.jpg",
-    projectName: "Lorem Ipsum3",
-    description:
-      "Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.",
-    techStack: ["Next.js", "TypeScript", "Node.js", "Tailwind"],
-    link: "https://example.com",
-    isPrivate: true,
-  },
-  {
-    image: "dummy-profile.jpg",
-    projectName: "Lorem Ipsum4",
-    description:
-      "Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.",
-    techStack: ["Next.js", "TypeScript", "Node.js", "Tailwind"],
-    link: "https://example.com",
-    isPrivate: true,
-  },
-];
+// const projects: Projects[] = [
+//   {
+//     image: 'dummy-profile.jpg',
+//     projectName: 'Lorem Ipsum',
+//     description:
+//       'Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.',
+//     techStack: ['Next.js', 'TypeScript', 'Node.js', 'Tailwind'],
+//     link: 'https://example.com',
+//     isPrivate: true,
+//   },
+//   {
+//     image: 'dummy-profile.jpg',
+//     projectName: 'Lorem Ipsum2',
+//     description:
+//       'Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.',
+//     techStack: ['Next.js', 'TypeScript', 'Node.js', 'Tailwind'],
+//     link: 'https://example.com',
+//     isPrivate: false,
+//   },
+//   {
+//     image: 'dummy-profile.jpg',
+//     projectName: 'Lorem Ipsum3',
+//     description:
+//       'Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.',
+//     techStack: ['Next.js', 'TypeScript', 'Node.js', 'Tailwind'],
+//     link: 'https://example.com',
+//     isPrivate: true,
+//   },
+//   {
+//     image: 'dummy-profile.jpg',
+//     projectName: 'Lorem Ipsum4',
+//     description:
+//       'Digital invoice and payment reminder solution that makes billing management easier. Built with modern tech stack for optimal performance.',
+//     techStack: ['Next.js', 'TypeScript', 'Node.js', 'Tailwind'],
+//     link: 'https://example.com',
+//     isPrivate: true,
+//   },
+// ]
 
 const ProjectsSection = () => {
+  const { isLoading, error, isError, projects } = useGetProject()
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (isError) {
+    return (
+      <div className="p-4 bg-red-50 text-red-700 rounded-md">
+        <p>Error loading content: {String(error)}</p>
+      </div>
+    )
+  }
+
+  if (!projects) {
+    return null
+  }
   return (
     <div className="mb-32">
       <div className="flex justify-between items-center mb-12">
@@ -59,9 +78,9 @@ const ProjectsSection = () => {
             key={project.projectName}
             className="bg-bone dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-colors hover:shadow-xl"
           >
-            <div className="relative h-52 flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+            <div className="relative h-52 flex items-center justify-center bg-gray-100 dark:bg-gray-700 ">
               <img
-                src="dummy-profile.jpg"
+                src={project.imageUrl}
                 alt="Fakturly"
                 className="w-full h-full object-contain group-hover:opacity-90 transition-opacity"
               />
@@ -90,7 +109,7 @@ const ProjectsSection = () => {
                   </span>
                 ) : (
                   <a
-                    href={project.link}
+                    href={project.link || ''}
                     target="_blank"
                     className="inline-flex items-center px-3 py-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                   >
@@ -115,6 +134,6 @@ const ProjectsSection = () => {
         ))}
       </div>
     </div>
-  );
-};
-export default ProjectsSection;
+  )
+}
+export default ProjectsSection

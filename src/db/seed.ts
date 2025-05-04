@@ -1,10 +1,12 @@
 // src/lib/db/seed.ts
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { profileTable } from './schemas/profile'
+import { profileTable } from './schemas/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 
-const client = new Client({ connectionString: process.env.DATABASE_URL })
+const client = new Client({
+  connectionString: process.env.NEXT_PUBLIC_DATABASE_URL,
+})
 const db = drizzle(client)
 
 async function seed() {

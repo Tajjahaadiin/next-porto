@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { technologies } from './schemas/profile'
+import { technologies } from './schemas/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 
@@ -28,7 +28,7 @@ const mockTechStack = [
   },
   {
     techName: 'expressjs',
-    imageUrl: '/techstack/express.png',
+    imageUrl: '/techstack/expressjs.png',
   },
 ]
 

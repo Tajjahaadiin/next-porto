@@ -1,6 +1,6 @@
 'use client'
 
-import { getContent } from '@/app/actions/getContent'
+import { getContent } from '@/app/actions/getContents'
 import { useQuery } from '@tanstack/react-query'
 
 export const contentKeys = {

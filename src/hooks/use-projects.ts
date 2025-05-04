@@ -1,27 +1,27 @@
 'use client'
 
-import { getTechstack } from '@/app/actions/getTechstacks'
+import { getProjectsWithTechStack } from '@/app/actions/getProjects'
 import { useQuery } from '@tanstack/react-query'
 
 export const contentKeys = {
-  all: ['techstack'] as const,
+  all: ['projects'] as const,
   detail: () => [...contentKeys.all, 'detail'] as const,
 }
 
-export function useGetTech() {
+export function useGetProject() {
   // Query for fetching content
   const {
     isError,
     isLoading,
-    data: techstacks,
+    data: projects,
     error,
   } = useQuery({
     queryKey: contentKeys.detail(),
-    queryFn: getTechstack,
+    queryFn: getProjectsWithTechStack,
   })
 
   return {
-    techstacks,
+    projects,
     isLoading,
     isError,
     error,
