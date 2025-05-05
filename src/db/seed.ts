@@ -1,6 +1,6 @@
 // src/lib/db/seed.ts
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { profileTable } from './schemas/schema'
+import { profileTable } from './schema/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 

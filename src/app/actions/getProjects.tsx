@@ -1,5 +1,5 @@
-import { db } from '@/db/db'
-import { projects, projectTechStack } from '@/db/schemas/schema'
+import { db } from '@/db'
+import { projects, projectTechStack } from '@/db/schema/schema'
 import { eq } from 'drizzle-orm'
 export async function getProjects() {
   const rows = await db.select().from(projects).limit(5)

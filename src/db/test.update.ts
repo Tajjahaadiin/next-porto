@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { NewTestArray, table } from './schemas/schema'
+import { NewTestArray, table } from './schema/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 

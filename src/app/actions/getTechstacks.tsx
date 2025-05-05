@@ -1,5 +1,5 @@
-import { db } from '@/db/db'
-import { technologies } from '@/db/schemas/schema'
+import { db } from '@/db'
+import { technologies } from '@/db/schema/schema'
 
 // const database = drizzle({ schema })
 

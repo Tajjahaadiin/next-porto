@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migration:generate": "drizzle-kit generate",
-    "migration:migrate": "drizzle-kit migrate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:update": "npm run db:generate && npm run db:migrate",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -19,9 +21,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
+    "dotenv-expand": "^11.0.6",
     "drizzle-orm": "^0.43.1",
+    "drizzle-zod": "^0.7.1",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
+    "next-auth": "^5.0.0-beta.19",
     "next-themes": "^0.4.6",
     "pg": "^8.15.6",
     "react": "^19.0.0",

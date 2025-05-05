@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { technologies } from './schemas/schema'
+import { technologies } from './schema/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 

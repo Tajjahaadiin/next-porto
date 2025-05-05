@@ -3,7 +3,7 @@ import {
   projectTechStack,
   projects,
   NewProjectTechStackEntry,
-} from './schemas/schema'
+} from './schema/schema'
 import { Client } from 'pg'
 import 'dotenv/config'
 import { ProjectList } from '@/types/project.entity'
