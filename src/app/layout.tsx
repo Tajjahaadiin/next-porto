@@ -3,6 +3,7 @@ import { QueryProvider } from '@/providers/query-providers'
 import ClientToaster from '@/providers/toast-providers'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 const geistSans = Geist({

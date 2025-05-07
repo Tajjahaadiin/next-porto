@@ -1,6 +1,5 @@
 'use client'
 
-import { getContent } from '@/app/actions/getContents'
 import { useQuery } from '@tanstack/react-query'
 
 export const contentKeys = {
@@ -17,7 +16,8 @@ export function useContent() {
     error,
   } = useQuery({
     queryKey: contentKeys.detail(),
-    queryFn: getContent,
+
+    queryFn: () => {},
   })
 
   return {

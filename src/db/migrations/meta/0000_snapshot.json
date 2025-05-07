@@ -1,5 +1,5 @@
 {
-  "id": "d33da235-4b1f-45d2-840a-3e7d5125af24",
+  "id": "1abe8b8c-8d9d-4554-ad6c-65d9e1c43ada",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -36,6 +36,18 @@
         "techlist": {
           "name": "techlist",
           "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "repo_url": {
+          "name": "repo_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "demo_url": {
+          "name": "demo_url",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
@@ -85,13 +97,13 @@
           "name": "tech_name",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "tech_url": {
           "name": "tech_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -175,7 +187,7 @@
           "name": "image",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "is_available": {
           "name": "is_available",
@@ -262,19 +274,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
+        "start_date": {
+          "name": "start_date",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
+        "end_date": {
+          "name": "end_date",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
       "indexes": {},

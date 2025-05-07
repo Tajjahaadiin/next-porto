@@ -1,6 +1,4 @@
 'use client'
-
-import { getTechstack } from '@/app/actions/getTechstacks'
 import { useQuery } from '@tanstack/react-query'
 
 export const contentKeys = {
@@ -17,7 +15,7 @@ export function useGetTech() {
     error,
   } = useQuery({
     queryKey: contentKeys.detail(),
-    queryFn: getTechstack,
+    queryFn:
   })
 
   return {

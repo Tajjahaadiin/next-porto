@@ -9,6 +9,8 @@ export const project = pgTable('project', {
   projectName: varchar('project_name', { length: 255 }).notNull(),
   description: text('description').notNull(),
   techList: varchar('techlist').array(),
+  repoUrl: varchar('repo_url', { length: 255 }),
+  demoUrl: varchar('demo_url', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -18,11 +20,15 @@ const baseSchema = createInsertSchema(project, {
   projectName: (schema) => schema.min(1),
   description: (schema) => schema.min(1),
   techList: (schema) => schema.min(1),
+  demoUrl: (schema) => schema.min(1),
+  repoUrl: (schema) => schema.min(1),
 }).pick({
   imageUrl: true,
   projectName: true,
   description: true,
   techList: true,
+  demoUrl: true,
+  repoUrl: true,
 })
 export const projectSchema = z.union([
   z.object({
@@ -31,6 +37,8 @@ export const projectSchema = z.union([
     projectName: baseSchema.shape.projectName,
     description: baseSchema.shape.description,
     techList: baseSchema.shape.techList,
+    demoUrl: baseSchema.shape.demoUrl,
+    repoUrl: baseSchema.shape.repoUrl,
   }),
   z.object({
     mode: z.literal('edit'),
@@ -39,6 +47,8 @@ export const projectSchema = z.union([
     projectName: baseSchema.shape.projectName,
     description: baseSchema.shape.description,
     techList: baseSchema.shape.techList,
+    demoUrl: baseSchema.shape.demoUrl,
+    repoUrl: baseSchema.shape.repoUrl,
   }),
 ])
 export type ProjectSchema = z.infer<typeof projectSchema>

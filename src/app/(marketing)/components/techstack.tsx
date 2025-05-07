@@ -1,38 +1,12 @@
-'use client'
+'use server'
 import { cn } from '@/lib/utils'
 import { Marquee } from './marquee'
 import Image from 'next/image'
-import { useGetTech } from '@/hooks/use-techstack'
 import Spinner from '@/components/spinner'
+import { SelectTechstackModel } from '@/db/schema/techstack'
+import { getTechstacks } from '@/app/queries'
 
-// const reviews = [
-//   {
-//     name: 'React',
-//     img: '/techstack/react.png',
-//   },
-//   {
-//     name: 'typescript',
-//     img: '/techstack/typescript.png',
-//   },
-//   {
-//     name: 'tailwind',
-//     img: '/techstack/tailwind.png',
-//   },
-//   {
-//     name: 'nextjs',
-//     img: '/techstack/next.png',
-//   },
-// ]
-
-// const firstRow = reviews.slice(0, reviews.length / 2);
-
-const ReviewCard = ({
-  techName,
-  imageUrl,
-}: {
-  imageUrl: string
-  techName: string
-}) => {
+const ReviewCard = (value: SelectTechstackModel) => {
   return (
     <figure
       className={cn(
@@ -46,8 +20,8 @@ const ReviewCard = ({
       <div className="">
         <Image
           className="aspect-square object-contain"
-          alt={techName}
-          src={imageUrl}
+          alt={value.techName || ''}
+          src={value.techUrl || ''}
           draggable="false"
           height={500}
           width={500}
@@ -57,33 +31,19 @@ const ReviewCard = ({
   )
 }
 
-export function MarqueeDemo() {
-  const { techstacks, error, isLoading, isError } = useGetTech()
-  console.table(techstacks)
-  if (isLoading) {
-    return <Spinner />
-  }
-
-  if (isError) {
-    return (
-      <div className="p-4 bg-red-50 text-red-700 rounded-md">
-        <p>Error loading content: {String(error)}</p>
-      </div>
-    )
-  }
-
-  if (!techstacks) {
-    return null
-  }
+export async function MarqueeDemo() {
+  const techstacks: SelectTechstackModel[] = await getTechstacks()
   return (
     <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-20 gap-20 ">
       <h2 className="text-4xl font-medium text-left ">
         Tech Stack - Tools I Use Everyday
       </h2>
       <Marquee pauseOnHover className="[--duration:20s] ">
-        {techstacks.map((review) => (
-          <ReviewCard key={review.id} {...review} />
-        ))}
+        <>
+          {techstacks.map((value) => (
+            <ReviewCard {...value} key={value.id} />
+          ))}
+        </>
       </Marquee>
       <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
       <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>

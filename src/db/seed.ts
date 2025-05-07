@@ -1,27 +1,34 @@
-// src/lib/db/seed.ts
-import { drizzle } from 'drizzle-orm/node-postgres'
-import { profileTable } from './schema/schema'
-import { Client } from 'pg'
-import 'dotenv/config'
+'use server'
+import { sql, Table } from 'drizzle-orm'
 
-const client = new Client({
-  connectionString: process.env.NEXT_PUBLIC_DATABASE_URL,
-})
-const db = drizzle(client)
+import { db, DB } from '@/db'
+import * as schema from '@/db/schema'
+import * as seeds from '@/db/seeds'
 
-async function seed() {
-  await client.connect()
-
-  await db.insert(profileTable).values({
-    surname: 'Tajj',
-    motto: 'Aspiring Fullstack Developer',
-    location: 'Depok Sawangan, Indonesia',
-    content: `So glad you stopped by! I'm an enthusiastic aspiring React developer eager to create intuitive and enjoyable web experiences. I'm excited to share my work with you! Explore my projects to see how I'm putting my React skills into practice. Feel free to connect and say hello!`,
-    image: 'profiles.jpg',
-    isAvailable: true,
-  })
-
-  await client.end()
+async function resetTable(db: DB, table: Table) {
+  return db.execute(sql`truncate table ${table} restart identity cascade`)
+}
+async function main() {
+  for (const table of [
+    schema.user,
+    schema.techstack,
+    schema.work,
+    schema.project,
+  ]) {
+    await resetTable(db, table)
+  }
+  await seeds.user(db)
+  await seeds.techstack(db)
+  await seeds.experiences(db)
+  await seeds.project(db)
 }
 
-seed().catch(console.error)
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    console.log('seeding done!!')
+    process.exit(1)
+  })

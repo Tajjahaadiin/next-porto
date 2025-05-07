@@ -1,50 +1,51 @@
-import { InferSelectModel } from 'drizzle-orm'
-import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
-import { createInsertSchema } from 'drizzle-zod'
-import { z } from 'zod'
+import { DB } from '@/db'
+import { work, WorkSchema } from '@/db/schema/experiences'
+const experiences: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = [
+  {
+    startDate: 'October 2022',
+    endDate: 'march 2023',
+    workPosition: 'Internship Web Developer',
+    workPlace: 'Putra Winata',
+    workDescription: [
+      'Develop and landing Page',
+      'Collaborate with the team to complete projects on time',
+      'Implement new features based on user requirements',
+      'optimize application performance and users experience',
+    ],
+    workTech: ['HTML', 'CSS', 'Javascript'],
+    imageUrl: '/putrawinata-logo.png',
+  },
+  {
+    startDate: 'Oct 2023',
+    endDate: '0ct 2024',
+    workPosition: 'Junior Developer',
+    workPlace: 'Putra Winata',
+    workDescription: [
+      'Develop and Web Expo',
+      'Collaborate with the team to complete projects on time',
+      'Implement Gamification features based on user requirements',
+      'optimize application performance and users experience',
+    ],
+    workTech: ['C#', 'Javascript', 'Unity', 'Playcanvas', 'WebGl'],
+    imageUrl: '/nickystudio.png',
+  },
+]
+const mock = () => {
+  const data: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = []
 
-export const work = pgTable('work', {
-  id: uuid().primaryKey().defaultRandom().unique(),
-  ImageUrl: varchar('image_url', { length: 255 }),
-  workPosition: varchar('work_position', { length: 255 }),
-  workPlace: varchar('work_place', { length: 255 }),
-  workDescription: varchar('work_description').array().notNull(),
-  workTech: varchar('work_tech').array().notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
-
-const baseSchema = createInsertSchema(work, {
-  ImageUrl: (schema) => schema.min(1),
-  workPosition: (schema) => schema.min(1),
-  workPlace: (schema) => schema.min(1),
-  workDescription: (schema) => schema.min(1),
-  workTech: (schema) => schema.min(1),
-}).pick({
-  ImageUrl: true,
-  workPosition: true,
-  workPlace: true,
-  workDescription: true,
-  workTech: true,
-})
-export const workSchema = z.union([
-  z.object({
-    mode: z.literal('create'),
-    ImageUrl: baseSchema.shape.ImageUrl,
-    workPosition: baseSchema.shape.workPosition,
-    workPlace: baseSchema.shape.workPlace,
-    workDescription: baseSchema.shape.workDescription,
-    workTech: baseSchema.shape.workTech,
-  }),
-  z.object({
-    mode: z.literal('edit'),
-    id: z.string().min(1),
-    ImageUrl: baseSchema.shape.ImageUrl,
-    workPosition: baseSchema.shape.workPosition,
-    workPlace: baseSchema.shape.workPlace,
-    workDescription: baseSchema.shape.workDescription,
-    workTech: baseSchema.shape.workTech,
-  }),
-])
-export type WorkSchema = z.infer<typeof workSchema>
-export type SelectWorkModel = InferSelectModel<typeof work>
+  for (const value of experiences) {
+    data.push({
+      startDate: value.startDate,
+      endDate: value.endDate,
+      workPosition: value.workPosition,
+      workPlace: value.workPlace,
+      workDescription: value.workDescription,
+      workTech: value.workTech,
+      imageUrl: value.imageUrl,
+    })
+  }
+  return data
+}
+export async function seed(db: DB) {
+  await db.insert(work).values(mock())
+}

@@ -5,8 +5,8 @@ import { z } from 'zod'
 
 export const techstack = pgTable('techstack', {
   id: uuid().primaryKey().defaultRandom().unique(),
-  techName: varchar('tech_name', { length: 255 }),
-  techUrl: varchar('tech_url', { length: 255 }),
+  techName: varchar('tech_name', { length: 255 }).notNull(),
+  techUrl: varchar('tech_url', { length: 255 }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -26,8 +26,13 @@ export const techStackSchema = z.union([
   }),
   z.object({
     mode: z.literal('edit'),
+    id: z.string().min(1),
     techName: baseSchema.shape.techName,
     techUrl: baseSchema.shape.techUrl,
+  }),
+  z.object({
+    mode: z.literal('delete'),
+    id: z.string().min(1),
   }),
 ])
 

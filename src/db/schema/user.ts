@@ -17,7 +17,7 @@ export const user = pgTable('user', {
   shortDescription: varchar('short_description', { length: 255 }).notNull(),
   location: varchar('location', { length: 255 }).notNull(),
   description: text('description').notNull(),
-  image: varchar('image', { length: 255 }).notNull(),
+  image: varchar('image', { length: 255 }),
   isAvailable: boolean('is_available').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -31,7 +31,6 @@ const baseSchema = createInsertSchema(user, {
   location: (schema) => schema.min(1),
   description: (schema) => schema.min(1),
   image: (schema) => schema.min(1),
-  isAvailable: (schema) => schema.default(true),
 }).pick({
   email: true,
   password: true,
@@ -45,12 +44,24 @@ const baseSchema = createInsertSchema(user, {
 
 export const userSchema = z.union([
   z.object({
-    mode: z.literal('logIn'),
+    mode: z.literal('signIn'),
     email: baseSchema.shape.email,
     password: baseSchema.shape.password,
   }),
   z.object({
     mode: z.literal('update'),
+    nickname: baseSchema.shape.nickname,
+    shortDescription: baseSchema.shape.shortDescription,
+    location: baseSchema.shape.location,
+    description: baseSchema.shape.description,
+    image: baseSchema.shape.image,
+    isAvailable: baseSchema.shape.isAvailable,
+    id: z.string().min(1),
+  }),
+  z.object({
+    mode: z.literal('create'),
+    email: baseSchema.shape.email,
+    password: baseSchema.shape.password,
     nickname: baseSchema.shape.nickname,
     shortDescription: baseSchema.shape.shortDescription,
     location: baseSchema.shape.location,

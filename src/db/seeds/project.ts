@@ -1,45 +1,45 @@
-import { InferSelectModel } from 'drizzle-orm'
-import { pgTable, varchar, uuid, text, timestamp } from 'drizzle-orm/pg-core'
-import { createInsertSchema } from 'drizzle-zod'
-import { z } from 'zod'
+import { DB } from '@/db'
+import { project, ProjectSchema } from '@/db/schema/project'
 
-export const project = pgTable('project', {
-  id: uuid().primaryKey().defaultRandom().unique(),
-  imageUrl: varchar('image_url', { length: 255 }).notNull(),
-  projectName: varchar('project_name', { length: 255 }).notNull(),
-  description: text('description').notNull(),
-  techList: varchar('techlist').array(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
+const mockProjects: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] =
+  [
+    {
+      imageUrl: '/circle.png',
+      projectName: 'Circle App',
+      description:
+        'A streamlined social media application built with Next.js, TypeScript, Node.js, and Tailwind CSS. This simplified Twitter clone allows users to create and engage with threads, like and comment on posts, and customize their profiles.',
+      techList: ['react.js', 'TypeScript', 'chakra-ui', 'express.js'],
+      demoUrl: 'https://foundation-circle.vercel.app/',
+      repoUrl: '',
+    },
+    {
+      imageUrl: '/issuetracking.png',
+      projectName: 'Mode',
+      description:
+        'Introducing Mode, an efficient issue tracking solution developed with Next.js, TypeScript, Node.js, and styled using Tailwind CSS. Inspired by Linear, Mode offers a focused approach to task management, bug tracking, and project workflow.',
+      techList: ['Next.js', 'Neon', 'Shadcn', 'PostgreSQL'],
+      repoUrl: '',
+      demoUrl: '',
+    },
+    // Add more dummy data here
+  ]
 
-const baseSchema = createInsertSchema(project, {
-  imageUrl: (schema) => schema.min(1),
-  projectName: (schema) => schema.min(1),
-  description: (schema) => schema.min(1),
-  techList: (schema) => schema.min(1),
-}).pick({
-  imageUrl: true,
-  projectName: true,
-  description: true,
-  techList: true,
-})
-export const projectSchema = z.union([
-  z.object({
-    mode: z.literal('create'),
-    imageUrl: baseSchema.shape.imageUrl,
-    projectName: baseSchema.shape.projectName,
-    description: baseSchema.shape.description,
-    techList: baseSchema.shape.techList,
-  }),
-  z.object({
-    mode: z.literal('edit'),
-    id: z.string().min(1),
-    imageUrl: baseSchema.shape.imageUrl,
-    projectName: baseSchema.shape.projectName,
-    description: baseSchema.shape.description,
-    techList: baseSchema.shape.techList,
-  }),
-])
-export type ProjectSchema = z.infer<typeof projectSchema>
-export type SelectProjectModel = InferSelectModel<typeof project>
+const mock = () => {
+  const data: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] = []
+  for (const value of mockProjects) {
+    data.push({
+      imageUrl: value.imageUrl,
+      projectName: value.projectName,
+      description: value.description,
+      techList: value.techList,
+      repoUrl: value.repoUrl,
+      demoUrl: value.demoUrl,
+    })
+  }
+
+  return data
+}
+
+export async function seed(db: DB) {
+  await db.insert(project).values(mock())
+}
