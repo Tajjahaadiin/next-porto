@@ -1,37 +1,42 @@
 'use server'
 import { db } from '@/db'
-import { work, WorkSchema } from '@/db/schema/experiences'
+import {
+  InsertWork,
+  UpdateWork,
+  work,
+  WorkSchema,
+} from '@/db/schema/experiences'
 import { executeAction } from '@/db/utils/executeAction'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 export async function updateExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'edit' }>, 'mode'>
+  data: Omit<Extract<UpdateWork, { mode: 'edit' }>, 'mode'>
 ) {
   return executeAction({
     actionFn: async () => {
       const { id, ...restData } = data
       await db.update(work).set(restData).where(eq(work.id, id))
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/experiences')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks updated successfully',
+    clientSuccessMessage: 'experiences updated successfully',
     serverErrorMessage: 'update',
   })
 }
 export async function createExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>
+  data: Omit<Extract<InsertWork, { mode: 'create' }>, 'mode'>
 ) {
   return executeAction({
     actionFn: async () => {
       await db.insert(work).values(data)
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/experiences')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks updated successfully',
-    serverErrorMessage: 'update',
+    clientSuccessMessage: 'experiences created successfully',
+    serverErrorMessage: 'create',
   })
 }
 export async function deleteExperiences(
@@ -41,10 +46,10 @@ export async function deleteExperiences(
     actionFn: async () => {
       await db.delete(work).where(eq(work.id, data.id))
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/experiences')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks delete successfully',
+    clientSuccessMessage: 'experiences deleted successfully',
     serverErrorMessage: 'delete',
   })
 }

@@ -1,50 +1,55 @@
 'use server'
 import { db } from '@/db'
-import { work, WorkSchema } from '@/db/schema/experiences'
+import {
+  InserProject,
+  project,
+  ProjectSchema,
+  UpdateProject,
+} from '@/db/schema/project'
 import { executeAction } from '@/db/utils/executeAction'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
-export async function updateExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'edit' }>, 'mode'>
+export async function updateProject(
+  data: Omit<Extract<UpdateProject, { mode: 'edit' }>, 'mode'>
 ) {
   return executeAction({
     actionFn: async () => {
       const { id, ...restData } = data
-      await db.update(work).set(restData).where(eq(work.id, id))
+      await db.update(project).set(restData).where(eq(project.id, id))
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/projects')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks updated successfully',
+    clientSuccessMessage: 'projects updated successfully',
     serverErrorMessage: 'update',
   })
 }
-export async function createExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>
+export async function createProject(
+  data: Omit<Extract<InserProject, { mode: 'create' }>, 'mode'>
 ) {
   return executeAction({
     actionFn: async () => {
-      await db.insert(work).values(data)
+      await db.insert(project).values(data)
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/projects')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks updated successfully',
-    serverErrorMessage: 'update',
+    clientSuccessMessage: 'project created successfully',
+    serverErrorMessage: 'create',
   })
 }
-export async function deleteExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'delete' }>, 'mode'>
+export async function deleteProject(
+  data: Omit<Extract<ProjectSchema, { mode: 'delete' }>, 'mode'>
 ) {
   return executeAction({
     actionFn: async () => {
-      await db.delete(work).where(eq(work.id, data.id))
+      await db.delete(project).where(eq(project.id, data.id))
       console.log('done')
-      revalidatePath('/techstacks')
+      revalidatePath('/projects')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks delete successfully',
+    clientSuccessMessage: 'project deleted successfully',
     serverErrorMessage: 'delete',
   })
 }

@@ -1,10 +1,10 @@
 import { SessionProvider } from 'next-auth/react'
-import SignIn from './sign-in'
+import SignOutForm from './_components/signout-form'
 
 export default function Page() {
   return (
     <SessionProvider>
-      <SignIn />
+      <SignOutForm />
     </SessionProvider>
   )
 }

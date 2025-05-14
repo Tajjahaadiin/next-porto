@@ -1,6 +1,6 @@
 {
-  "id": "f1b6407b-f565-4653-8d67-7186f0484de4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "927a3709-e648-4448-aaef-cfe32afd6c9c",
+  "prevId": "f259ea82-5323-4440-978b-e98c842c8f96",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -19,7 +19,13 @@
           "name": "image_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "project_name": {
           "name": "project_name",
@@ -103,13 +109,13 @@
           "name": "tech_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "public_id": {
           "name": "public_id",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -258,6 +264,12 @@
         },
         "image_url": {
           "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "public_id": {
+          "name": "public_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false

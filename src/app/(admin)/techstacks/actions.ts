@@ -13,7 +13,10 @@ export async function updateTechStack(
   return executeAction({
     actionFn: async () => {
       const { id, ...restData } = data
-      await db.update(techstack).set(restData).where(eq(techstack.id, id))
+      await db
+        .update(techstack)
+        .set({ ...restData, updatedAt: new Date() })
+        .where(eq(techstack.id, id))
       console.log('done')
       revalidatePath('/techstacks')
     },
@@ -32,8 +35,8 @@ export async function createTechStack(
       revalidatePath('/techstacks')
     },
     isProtected: false,
-    clientSuccessMessage: 'techstacks updated successfully',
-    serverErrorMessage: 'update',
+    clientSuccessMessage: 'techstacks created successfully',
+    serverErrorMessage: 'create',
   })
 }
 export async function deleteTechStack(

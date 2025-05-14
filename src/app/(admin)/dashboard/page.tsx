@@ -1,6 +1,11 @@
+import { auth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
+import { redirect } from 'next/dist/client/components/redirect'
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await auth()
+  console.log(session)
+  if (!session?.user) return redirect('/sign-in')
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="text-center flex flex-col gap-4">

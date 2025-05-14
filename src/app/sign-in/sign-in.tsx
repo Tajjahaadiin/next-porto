@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
-import { UserForm } from '@/app/_components/user-form'
+import UserForm from './_components/signin-form'
+
 export default function SignIn() {
   return (
     <main className="flex  flex-col min-w-screen min-h-screen items-center justify-center ">

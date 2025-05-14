@@ -14,6 +14,7 @@ const experiences: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = [
     ],
     workTech: ['HTML', 'CSS', 'Javascript'],
     imageUrl: '/putrawinata-logo.png',
+    publicId: '',
   },
   {
     startDate: 'Oct 2023',
@@ -28,6 +29,7 @@ const experiences: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = [
     ],
     workTech: ['C#', 'Javascript', 'Unity', 'Playcanvas', 'WebGl'],
     imageUrl: '/nickystudio.png',
+    publicId: '',
   },
 ]
 const mock = () => {
@@ -42,6 +44,7 @@ const mock = () => {
       workDescription: value.workDescription,
       workTech: value.workTech,
       imageUrl: value.imageUrl,
+      publicId: value.publicId,
     })
   }
   return data

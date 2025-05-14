@@ -1,6 +1,6 @@
 {
-  "id": "f1b6407b-f565-4653-8d67-7186f0484de4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ca429f3c-a648-465c-b461-c95948f96307",
+  "prevId": "f1b6407b-f565-4653-8d67-7186f0484de4",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -17,6 +17,12 @@
         },
         "image_url": {
           "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_id": {
+          "name": "public_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -258,6 +264,12 @@
         },
         "image_url": {
           "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "public_id": {
+          "name": "public_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false

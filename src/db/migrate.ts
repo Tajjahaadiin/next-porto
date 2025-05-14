@@ -4,7 +4,6 @@ import { neon } from '@neondatabase/serverless'
 import config from '$/drizzle.config'
 
 const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL!)
-console.log('string', process.env.NEXT_PUBLIC_DATABASE_URL)
 export const db = drizzle({ client: sql })
 async function main() {
   console.log('Starting database migration...') // Added log

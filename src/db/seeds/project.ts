@@ -5,6 +5,7 @@ const mockProjects: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] =
   [
     {
       imageUrl: '/circle.png',
+      publicId: '',
       projectName: 'Circle App',
       description:
         'A streamlined social media application built with Next.js, TypeScript, Node.js, and Tailwind CSS. This simplified Twitter clone allows users to create and engage with threads, like and comment on posts, and customize their profiles.',
@@ -14,6 +15,7 @@ const mockProjects: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] =
     },
     {
       imageUrl: '/issuetracking.png',
+      publicId: '',
       projectName: 'Mode',
       description:
         'Introducing Mode, an efficient issue tracking solution developed with Next.js, TypeScript, Node.js, and styled using Tailwind CSS. Inspired by Linear, Mode offers a focused approach to task management, bug tracking, and project workflow.',
@@ -29,6 +31,7 @@ const mock = () => {
   for (const value of mockProjects) {
     data.push({
       imageUrl: value.imageUrl,
+      publicId: value.publicId,
       projectName: value.projectName,
       description: value.description,
       techList: value.techList,

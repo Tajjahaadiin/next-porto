@@ -2,13 +2,7 @@
 import { db } from '@/db'
 import { work, WorkSchema } from '@/db/schema/experiences'
 import { project, ProjectSchema } from '@/db/schema/project'
-import {
-  SelectTechstackModel,
-  techstack,
-  TechStackSchema,
-} from '@/db/schema/techstack'
-import { user, UserSchema } from '@/db/schema/user'
-import { mockUpdateProject } from '@/lib/_mock'
+import { techstack, TechStackSchema } from '@/db/schema/techstack'
 import { eq } from 'drizzle-orm'
 export async function getUser() {
   const user = await db.query.user.findMany({
@@ -24,7 +18,7 @@ export async function getUser() {
 }
 export async function getUserwithData() {
   const user = await db.query.user.findMany()
-  console.log(user)
+  // console.log(user)
   return user[0]
 }
 export async function getProjects() {
@@ -55,12 +49,12 @@ export async function updateProject(
   const { id, ...restData } = data
   await db.update(project).set(restData).where(eq(project.id, id))
 }
-export async function updateExperiences(
-  data: Omit<Extract<WorkSchema, { mode: 'edit' }>, 'mode'>
-) {
-  const { id, ...restData } = data
-  await db.update(work).set(restData).where(eq(work.id, id))
-}
+// export async function updateExperiences(
+//   data: Omit<Extract<WorkSchema, { mode: 'edit' }>, 'mode'>
+// ) {
+//   const { id, ...restData } = data
+//   await db.update(work).set(restData).where(eq(work.id, id))
+// }
 // getUser()
 // getExperiences()
 // getProjects()

@@ -1,5 +1,5 @@
 import { getExperiences, getUserwithData } from '@/app/queries'
-import ExperiencesForm from './_components/experiences-form'
+import ExperiencesForm from './create/_components/create-experiences-form'
 import ExperiencesTable from './_components/experiences-table'
 
 export default async function UserPage() {

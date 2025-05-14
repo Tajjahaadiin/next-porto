@@ -1,4 +1,4 @@
-import { getURLFromRedirectError } from 'next/dist/client/components/redirect'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
 import { getErrorMessage } from '@/lib/utils'
 
@@ -28,6 +28,9 @@ export async function executeAction<T>({
       message: clientSuccessMessage,
     }
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
     console.error(serverErrorMessage, error)
     return {
       success: false,

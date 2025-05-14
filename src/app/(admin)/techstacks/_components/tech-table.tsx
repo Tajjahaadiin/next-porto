@@ -28,12 +28,12 @@ import Image from 'next/image'
 import TechForm from './techs-form'
 import { useState } from 'react'
 type Props = {
-  data: Pick<
-    SelectTechstackModel,
-    'id' | 'techName' | 'techUrl' | 'updatedAt'
-  >[]
+  data: SelectTechstackModel[]
 }
 export default function TechTable({ data }: Props) {
+  const [selectedTech, setSelectedTech] = useState<SelectTechstackModel | null>(
+    null
+  )
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -43,8 +43,8 @@ export default function TechTable({ data }: Props) {
     setIsEditOpen(false)
   }
   return (
-    <div className="mb-10">
-      <div className="flex flex-col gap-5">
+    <div className="mb-10 w-4xl">
+      <div className="flex flex-col gap-5 ">
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button
@@ -64,7 +64,12 @@ export default function TechTable({ data }: Props) {
             </DialogHeader>
 
             <TechForm
-              defaultValues={{ mode: 'create', techName: '', techUrl: '' }}
+              defaultValues={{
+                mode: 'create',
+                techName: '',
+                techUrl: '',
+                publicId: '',
+              }}
               onCloseModal={handleCloseModal}
             />
           </DialogContent>
@@ -73,9 +78,11 @@ export default function TechTable({ data }: Props) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Image</TableHead>
-              <TableHead>Tech Name</TableHead>
-              <TableHead>Tech Image Url</TableHead>
-              <TableHead className="text-right">Updated At</TableHead>
+              <TableHead className="w-[100px]">Tech Name</TableHead>
+              <TableHead className="w-[100px]">Tech Image Url</TableHead>
+              <TableHead className="text-left w-[100px]">Updated At</TableHead>
+              <TableHead className="w-[100px]">Edit</TableHead>
+              <TableHead className="w-[100px]">delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -91,14 +98,22 @@ export default function TechTable({ data }: Props) {
                   />
                 </TableCell>
                 <TableCell>{tech.techName}</TableCell>
-                <TableCell>{tech.techUrl}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="break-all max-w-[50px] h-20">
+                  <p className="text-wrap">{tech.techUrl}</p>
+                </TableCell>
+                <TableCell className="text-left">
                   {getRelativeTime(tech.updatedAt.toISOString())}
                 </TableCell>
                 <TableCell>
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedTech(tech)
+                          setIsEditOpen(true)
+                        }}
+                      >
                         <Edit className="text-blue-600" />
                       </Button>
                     </DialogTrigger>
@@ -112,7 +127,13 @@ export default function TechTable({ data }: Props) {
                       </DialogHeader>
 
                       <TechForm
-                        defaultValues={{ mode: 'edit', ...tech }}
+                        defaultValues={{
+                          mode: 'edit',
+                          id: selectedTech?.id || '',
+                          publicId: selectedTech?.publicId,
+                          techName: selectedTech?.techName || '',
+                          techUrl: selectedTech?.techUrl,
+                        }}
                         onCloseModal={handleCloseModal}
                       />
                     </DialogContent>
@@ -121,7 +142,13 @@ export default function TechTable({ data }: Props) {
                 <TableCell>
                   <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedTech(tech)
+                          setIsDeleteOpen(true)
+                        }}
+                      >
                         <SquareX className="text-red-500" />
                       </Button>
                     </DialogTrigger>
@@ -131,7 +158,11 @@ export default function TechTable({ data }: Props) {
                       </DialogHeader>
 
                       <TechForm
-                        defaultValues={{ mode: 'delete', id: tech.id }}
+                        defaultValues={{
+                          mode: 'delete',
+                          id: selectedTech?.id ?? '',
+                          publicId: selectedTech?.publicId,
+                        }}
                         onCloseModal={handleCloseModal}
                       />
                     </DialogContent>

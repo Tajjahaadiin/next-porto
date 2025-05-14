@@ -21,10 +21,16 @@ import { Edit, SquarePlus, SquareX } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import ExperiencesForm from './projects-form'
+import { SelectProjectModel } from '@/db/schema/project'
+import ProjectForm from './projects-form'
+import { cn } from '@/lib/utils'
 type Props = {
-  data: SelectWorkModel[]
+  data: SelectProjectModel[]
 }
 export default function ExperiencesTable({ data }: Props) {
+  const [selected, setSelectedProject] = useState<SelectProjectModel | null>(
+    null
+  )
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -35,105 +41,146 @@ export default function ExperiencesTable({ data }: Props) {
   }
   return (
     <div className="mb-10">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 px-20">
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button
               variant="link"
-              className="w-[50px] m-auto shadow-sm shadow-gray-400"
+              className="w-[50px] transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95 cursor-pointer m-auto shadow-sm shadow-gray-400"
             >
               <SquarePlus />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Create TechStack</DialogTitle>
+          <DialogContent
+            className={cn(' h-[90vh] min-w-[90vw]', 'max-h-full', 'p-0')}
+          >
+            <DialogHeader className="p-6 pb-4 border-b">
+              <DialogTitle className="font-extrabold">
+                Create Project
+              </DialogTitle>
               <DialogDescription className="text-wrap max-w-[375px]">
-                Insert techology name and url to generate new techstack here.
-                Click submit when you're done.
+                Insert new project.fill the project form thenClick submit when
+                you're done.
               </DialogDescription>
             </DialogHeader>
-
-            <ExperiencesForm
-              defaultValues={{
-                mode: 'create',
-                imageUrl: '',
-                workPosition: '',
-                workPlace: '',
-                workDescription: [],
-                workTech: [],
-                startDate: '',
-                endDate: '',
-              }}
-              descData={['']}
-              techData={['']}
-              onCloseModal={handleCloseModal}
-            />
+            <div className="p-10 pb-5  overflow-y-scroll  overflow-x-hidden">
+              <ProjectForm
+                defaultValues={{
+                  mode: 'create',
+                  techList: [],
+                  publicId: '',
+                  projectName: '',
+                  description: '',
+                  imageUrl: '',
+                  demoUrl: '',
+                  repoUrl: '',
+                }}
+                onCloseModal={handleCloseModal}
+              />
+            </div>
           </DialogContent>
         </Dialog>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Image</TableHead>
-              <TableHead>Tech Name</TableHead>
-              <TableHead>Tech Image Url</TableHead>
-              <TableHead className="text-right">Updated At</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Edit</TableHead>
+              <TableHead>Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((work) => (
-              <TableRow key={work.id}>
+            {data.map((project) => (
+              <TableRow key={project.id}>
                 <TableCell className="font-medium">
                   <Image
-                    src={work.imageUrl || ''}
+                    src={project.imageUrl || ''}
                     width={500}
                     height={500}
-                    alt={work.workPlace || ''}
+                    alt={project.imageUrl || ''}
                     className="aspect-square object-contain size-10"
                   />
                 </TableCell>
-                <TableCell>{work.workPosition}</TableCell>
-                <TableCell>{work.workPlace}</TableCell>
-
+                <TableCell>{project.projectName}</TableCell>
+                <TableCell>
+                  <p className="text-wrap">{project.description}</p>
+                </TableCell>
                 <TableCell>
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedProject(project)
+                          setIsEditOpen(true)
+                        }}
+                        className="w-[50px] transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95 cursor-pointer m-auto shadow-sm shadow-gray-400"
+                      >
                         <Edit className="text-blue-600" />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Edit TechStack</DialogTitle>
+                    <DialogContent
+                      className={cn(
+                        ' h-[90vh] min-w-[90vw]',
+                        'max-h-full',
+                        'p-0'
+                      )}
+                    >
+                      <DialogHeader className="p-6 pb-4 border-b">
+                        <DialogTitle className="font-bold">
+                          Edit Project
+                        </DialogTitle>
                         <DialogDescription className="text-wrap max-w-[375px]">
-                          Make changes to your techstack here. Click submit when
+                          Make changes to your Project here. Click submit when
                           you're done.
                         </DialogDescription>
                       </DialogHeader>
-
-                      <ExperiencesForm
-                        defaultValues={{ mode: 'edit', ...work }}
-                        onCloseModal={handleCloseModal}
-                        descData={work.workDescription}
-                        techData={work.workTech}
-                      />
+                      <div className="p-10 pb-5 overflow-y-auto  overflow-x-hidden">
+                        <ProjectForm
+                          defaultValues={{
+                            mode: 'edit',
+                            description: selected?.description || '',
+                            id: selected?.id || '',
+                            demoUrl: selected?.demoUrl || '',
+                            projectName: selected?.projectName || '',
+                            imageUrl: selected?.imageUrl || '',
+                            publicId: selected?.publicId || '',
+                            techList:
+                              selected?.techList?.map((tech) => ({
+                                value: tech,
+                              })) || [],
+                          }}
+                          onCloseModal={handleCloseModal}
+                        />
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
                 <TableCell>
                   <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">
-                        <SquareX className="text-red-500" />
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedProject(project)
+                          setIsDeleteOpen(true)
+                        }}
+                        className="w-[50px] transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95 cursor-pointer m-auto shadow-sm shadow-gray-400"
+                      >
+                        <SquareX className="text-red-500 " />
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
-                        <DialogTitle>Delete TechStack</DialogTitle>
+                        <DialogTitle>Delete Project</DialogTitle>
                       </DialogHeader>
-
-                      <ExperiencesForm
-                        defaultValues={{ mode: 'delete', id: work.id }}
+                      <ProjectForm
+                        defaultValues={{
+                          mode: 'delete',
+                          id: selected?.id || '',
+                          publicId: selected?.publicId,
+                        }}
                         onCloseModal={handleCloseModal}
                       />
                     </DialogContent>

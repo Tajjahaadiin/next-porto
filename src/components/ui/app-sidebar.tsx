@@ -1,3 +1,4 @@
+'use client'
 import { Briefcase, FileStack, FolderKanban, LogOut, User } from 'lucide-react'
 
 import {
@@ -11,6 +12,8 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
+import { Button } from './button'
+import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
 
 // Menu items.
 const items = [
@@ -35,8 +38,8 @@ const items = [
     icon: FolderKanban,
   },
   {
-    title: 'logout',
-    url: '/logout',
+    title: 'Sign-Out',
+    url: '/dashboard/sign-out',
     icon: LogOut,
   },
 ]
@@ -51,16 +54,16 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+              <SidebarMenuItem>
+                {items.map((item) => (
+                  <SidebarMenuButton key={item.title} asChild>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                ))}
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

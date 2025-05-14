@@ -10,7 +10,6 @@ export async function getUserByEmailAndPassword(data: unknown) {
     queryFn: async () => {
       const validatedData = userSchema.parse(data)
       if (validatedData.mode === 'signIn') {
-        console.log('masuk')
         return (
           await db
             .select()

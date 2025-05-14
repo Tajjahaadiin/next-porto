@@ -20,20 +20,47 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { updateUser } from '../actions'
 import { useRouter } from 'next/navigation'
+import { ImageUpload } from '@/app/_components/form-controllers'
+import { useState } from 'react'
+import {
+  deleteImageFromCloudinary,
+  uploadImageToCloudinary,
+} from '@/app/actions/cloudinary'
 type Props = {
   defaultValues: UserSchema
 }
 export default function UserForm({ defaultValues }: Props) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
     defaultValues,
   })
+
   const mode = useWatch({ control: form.control, name: 'mode' })
   const router = useRouter()
   const onSubmit: SubmitHandler<UserSchema> = async (data) => {
     let response
     if (data.mode !== 'update') {
       return
+    }
+    // 1. Upload image if selected
+    if (selectedFile) {
+      // Delete old image if exists
+      if (data.avatarPublicId) {
+        await deleteImageFromCloudinary(data.avatarPublicId)
+      }
+
+      const uploadResult = await uploadImageToCloudinary(selectedFile, {
+        folder: 'user_avatars',
+      })
+
+      if (uploadResult.secure_url && uploadResult.public_id) {
+        data.avatarUrl = uploadResult.secure_url
+        data.avatarPublicId = uploadResult.public_id
+      } else {
+        toast({ success: false, message: 'Image upload failed' })
+        return
+      }
     }
 
     const { mode, id, ...restOfData } = data
@@ -126,6 +153,10 @@ export default function UserForm({ defaultValues }: Props) {
               </>
             )}
 
+            <ImageUpload
+              initialUrl={form.getValues('avatarUrl') || ''}
+              onFileSelect={setSelectedFile}
+            />
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <Loader2 className="animate-spin" />

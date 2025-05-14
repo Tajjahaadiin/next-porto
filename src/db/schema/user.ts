@@ -17,7 +17,8 @@ export const user = pgTable('user', {
   shortDescription: varchar('short_description', { length: 255 }).notNull(),
   location: varchar('location', { length: 255 }).notNull(),
   description: text('description').notNull(),
-  image: varchar('image', { length: 255 }),
+  avatarUrl: varchar('avatar_url', { length: 255 }),
+  avatarPublicId: varchar('avatar_public_id', { length: 255 }),
   isAvailable: boolean('is_available').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -30,7 +31,8 @@ const baseSchema = createInsertSchema(user, {
   shortDescription: (schema) => schema.min(1),
   location: (schema) => schema.min(1),
   description: (schema) => schema.min(1),
-  image: (schema) => schema.min(1),
+  avatarUrl: (schema) => schema.min(1),
+  avatarPublicId: (schema) => schema.min(1),
 }).pick({
   email: true,
   password: true,
@@ -38,7 +40,8 @@ const baseSchema = createInsertSchema(user, {
   shortDescription: true,
   location: true,
   description: true,
-  image: true,
+  avatarUrl: true,
+  avatarPublicId: true,
   isAvailable: true,
 })
 
@@ -54,7 +57,8 @@ export const userSchema = z.union([
     shortDescription: baseSchema.shape.shortDescription,
     location: baseSchema.shape.location,
     description: baseSchema.shape.description,
-    image: baseSchema.shape.image,
+    avatarUrl: baseSchema.shape.avatarUrl,
+    avatarPublicId: baseSchema.shape.avatarPublicId,
     isAvailable: baseSchema.shape.isAvailable,
     id: z.string().min(1),
   }),
@@ -66,9 +70,13 @@ export const userSchema = z.union([
     shortDescription: baseSchema.shape.shortDescription,
     location: baseSchema.shape.location,
     description: baseSchema.shape.description,
-    image: baseSchema.shape.image,
+    avatarUrl: baseSchema.shape.avatarUrl,
+    avatarPublicId: baseSchema.shape.avatarPublicId,
     isAvailable: baseSchema.shape.isAvailable,
   }),
 ])
 export type UserSchema = z.infer<typeof userSchema>
+export type UserSchemaInput = z.infer<typeof userSchema> & {
+  imageFile?: FileList | null
+}
 export type SelectUserModel = InferSelectModel<typeof user>

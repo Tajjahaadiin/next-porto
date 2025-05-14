@@ -1,130 +1,145 @@
 'use client'
+import { ImageUpload } from '@/app/_components/form-controllers'
+import {
+  deleteImageFromCloudinary,
+  uploadImageToCloudinary,
+} from '@/app/actions/cloudinary'
 import { Input } from '@/components/form-controllers/input'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { TechStackSchema, techStackSchema } from '@/db/schema/techstack'
+import { UserSchema } from '@/db/schema/user'
 import { cn } from '@/lib/utils'
 import { toast } from '@/providers/toast-providers'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import { createTechStack, deleteTechStack, updateTechStack } from '../actions'
+import router from 'next/router'
+import { redirect } from 'next/navigation'
 type Props = {
   defaultValues?: TechStackSchema
   onCloseModal: () => void
 }
+
 export default function TechForm({ defaultValues, onCloseModal }: Props) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const form = useForm<TechStackSchema>({
     resolver: zodResolver(techStackSchema),
     defaultValues,
   })
+
   const mode = useWatch({ control: form.control, name: 'mode' })
-  const router = useRouter()
+
   const onSubmit: SubmitHandler<TechStackSchema> = async (data) => {
     let response
     switch (data.mode) {
       case 'create':
-        response = await createTechStack(data)
+        {
+          if (!selectedFile || null) {
+            new Promise((resolve) => {
+              toast({ success: false, message: 'Image connot be empty ' })
+              setTimeout(resolve, 5000)
+            }).finally(() => {
+              throw new Error('image cannot be empty')
+            })
+          }
+          if (selectedFile) {
+            const uploadResult = await uploadImageToCloudinary(selectedFile, {
+              folder: 'techstack',
+            })
+            if (uploadResult.secure_url && uploadResult.public_id) {
+              data.techUrl = uploadResult.secure_url
+              data.publicId = uploadResult.public_id
+            } else {
+              toast({ success: false, message: 'Image upload failed' })
+              return
+            }
+          }
+          const { mode, ...restOfData } = data
+          response = await createTechStack({ ...restOfData })
+        }
         break
       case 'edit':
-        response = await updateTechStack(data)
+        {
+          if (!selectedFile || null) {
+            new Promise((resolve) => {
+              toast({ success: false, message: 'Image connot be empty ' })
+              setTimeout(resolve, 5000)
+            }).finally(() => {
+              throw new Error('image cannot be empty')
+            })
+          }
+          if (data.publicId) {
+            await deleteImageFromCloudinary(data.publicId)
+          }
+          if (selectedFile) {
+            const uploadResult = await uploadImageToCloudinary(selectedFile, {
+              folder: 'techstack',
+            })
+            if (uploadResult.secure_url && uploadResult.public_id) {
+              data.techUrl = uploadResult.secure_url
+              data.publicId = uploadResult.public_id
+            } else {
+              toast({ success: false, message: 'Image upload failed' })
+              return
+            }
+          }
+          const { mode, ...restOfData } = data
+          response = await updateTechStack({ ...restOfData })
+        }
         break
-      case 'delete':
+      case 'delete': {
         response = await deleteTechStack(data)
+        if (data.publicId) {
+          await deleteImageFromCloudinary(data.publicId)
+        }
+        console.log('delete')
         break
-    }
-
-    toast(response)
-    console.log(data)
-    if (response.success) {
-      router.push('/techstacks')
+      }
     }
     onCloseModal()
+    if (response?.success == true) {
+      redirect('/techstacks')
+    }
+    toast(response)
   }
   return (
-    <div className={cn('grid gap-4 py-4 className="text-wrap max-w-[375px]" ')}>
+    <div
+      className={cn('grid gap-4 py-4  className="text-wrap max-w-[375px]" ')}
+    >
       <div className={cn('grid grid-cols-4 items-center gap-4 min-w-full')}>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="min-w-[375px] space-y-3"
           >
-            {mode === 'edit' && (
+            {(mode === 'create' || mode === 'edit') && (
               <>
                 <Input
                   control={form.control}
                   name="techName"
-                  label="Techology Name"
-                  type="text"
-                  className="border-gray-800"
+                  label="tech name"
                 />
-
-                <Input
-                  control={form.control}
-                  name="techUrl"
-                  label="Techology Url"
-                  type="text"
-                  className="border-gray-800"
-                />
-              </>
-            )}
-            {mode === 'create' && (
-              <>
-                <Input
-                  control={form.control}
-                  name="techName"
-                  label="Techology Name"
-                  type="text"
-                  className="border-gray-800"
-                />
-
-                <Input
-                  control={form.control}
-                  name="techUrl"
-                  label="Techology Url"
-                  type="text"
-                  className="border-gray-800"
+                <ImageUpload
+                  onFileSelect={setSelectedFile}
+                  initialUrl={form.getValues('techUrl') || ''}
                 />
               </>
             )}
             {mode === 'delete' && (
-              <div>
-                <h2 className="text-lg text-red-500">
-                  Do you want to continue
-                </h2>
-              </div>
-            )}
-            {mode === 'delete' ? (
               <>
-                <Button
-                  type="submit"
-                  variant={'destructive'}
-                  className="flex justify-self-end"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    'Submit'
-                  )}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  type="submit"
-                  className="flex justify-self-end"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    'Submit'
-                  )}
-                </Button>
+                <h2>Are You sure want to delete</h2>
               </>
             )}
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                'Submit'
+              )}
+            </Button>
           </form>
         </Form>
       </div>

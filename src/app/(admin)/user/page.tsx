@@ -13,7 +13,8 @@ export default async function UserPage() {
           nickname: user.nickname,
           shortDescription: user.shortDescription,
           description: user.description,
-          image: user.image,
+          avatarUrl: user.avatarUrl,
+          avatarPublicId: user.avatarPublicId,
           isAvailable: user.isAvailable,
           location: user.location,
         }}

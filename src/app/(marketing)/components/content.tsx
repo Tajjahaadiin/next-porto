@@ -25,8 +25,8 @@ const TextContent = (content: SelectUserModel) => {
           style={{ width: '20rem', height: '22rem', top: 0, transform }}
         >
           <Image
-            src={`/${content.image}` || ''}
-            alt={content.nickname || ''}
+            src={content.avatarUrl || '/profiles'}
+            alt={content.nickname}
             objectFit="cover"
             layout="fill"
             className={` !md:max-h-8 rounded-md shadow-gray-800 dark:shadow-sky-950  shadow-2xl transition-transform duration-300 group-hover:scale-110   `}
