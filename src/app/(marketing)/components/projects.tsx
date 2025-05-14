@@ -16,8 +16,8 @@ const ProjectsSection = async () => {
           >
             <div className="relative h-52 flex items-center justify-center bg-gray-100 dark:bg-gray-700 ">
               <img
-                src={project.imageUrl}
-                alt="Fakturly"
+                src={project.imageUrl || ''}
+                alt={project.projectName}
                 className="w-full h-full object-contain group-hover:opacity-90 transition-opacity"
               />
             </div>
@@ -29,9 +29,9 @@ const ProjectsSection = async () => {
                 {project.description}
               </p>
               <div className="flex flex-wrap gap-2 mb-6">
-                {project.techList?.map((tech) => (
+                {project.techList?.map((tech, index) => (
                   <span
-                    key={tech}
+                    key={`${tech}+${index}`}
                     className="px-3 py-1 bg-gray-400 dark:bg-gray-700 rounded-full text-xs font-medium text-gray-100 dark:text-gray-400"
                   >
                     {tech}

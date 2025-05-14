@@ -26,10 +26,21 @@ import Link from 'next/link'
 import DeleteWorkForm from './delete-experiences'
 import { cn } from '@/lib/utils'
 import EditExperiencesForm from './edit-experiences-form'
-type Props = {
-  data: SelectWorkModel[]
+type SelectExperiences = {
+  id: string
+  imageUrl: string | null
+  publicId: string | null
+  workPosition: string | null
+  workPlace: string | null
+  workDescription: string[]
+  workTech: string[]
+  startDate: string
+  endDate: string
 }
-export default function ExperiencesTable({ data }: Props) {
+type Props = {
+  workData: SelectExperiences[]
+}
+export default function ExperiencesTable({ workData }: Props) {
   const [selectedWork, setSelectedWork] = useState<SelectWorkModel | null>(null)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -64,7 +75,7 @@ export default function ExperiencesTable({ data }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((work) => (
+            {workData.map((work) => (
               <TableRow key={work.id}>
                 <TableCell className="font-medium">
                   {work.imageUrl && (
@@ -141,7 +152,13 @@ export default function ExperiencesTable({ data }: Props) {
                   {/* delete data */}
                   <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedWork(work)
+                          setIsDeleteOpen(true)
+                        }}
+                      >
                         <SquareX className="text-red-500" />
                       </Button>
                     </DialogTrigger>

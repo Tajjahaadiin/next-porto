@@ -1,6 +1,6 @@
 import { DB } from '@/db'
-import { work, WorkSchema } from '@/db/schema/experiences'
-const experiences: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = [
+import { InsertWork, work } from '@/db/schema/experiences'
+const experiences: Omit<Extract<InsertWork, { mode: 'create' }>, 'mode'>[] = [
   {
     startDate: 'October 2022',
     endDate: 'march 2023',
@@ -33,7 +33,7 @@ const experiences: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = [
   },
 ]
 const mock = () => {
-  const data: Omit<Extract<WorkSchema, { mode: 'create' }>, 'mode'>[] = []
+  const data: Omit<Extract<InsertWork, { mode: 'create' }>, 'mode'>[] = []
 
   for (const value of experiences) {
     data.push({

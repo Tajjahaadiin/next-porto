@@ -1,7 +1,7 @@
 import { DB } from '@/db'
-import { project, ProjectSchema } from '@/db/schema/project'
+import { InserProject, project, ProjectSchema } from '@/db/schema/project'
 
-const mockProjects: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] =
+const mockProjects: Omit<Extract<InserProject, { mode: 'create' }>, 'mode'>[] =
   [
     {
       imageUrl: '/circle.png',
@@ -27,7 +27,7 @@ const mockProjects: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] =
   ]
 
 const mock = () => {
-  const data: Omit<Extract<ProjectSchema, { mode: 'create' }>, 'mode'>[] = []
+  const data: Omit<Extract<InserProject, { mode: 'create' }>, 'mode'>[] = []
   for (const value of mockProjects) {
     data.push({
       imageUrl: value.imageUrl,

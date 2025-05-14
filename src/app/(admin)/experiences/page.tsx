@@ -9,7 +9,7 @@ export default async function UserPage() {
       <div className="text-center font-extrabold text-3xl">
         Work Experiences Form
       </div>
-      <ExperiencesTable data={experiences} />
+      <ExperiencesTable workData={experiences} />
     </div>
   )
 }

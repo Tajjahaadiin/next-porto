@@ -1,12 +1,10 @@
 'use client'
-import { MapPin, Circle } from 'lucide-react'
-import WhatsappdButton from './button/whatsapp'
-import DownloadButton from './button/download'
-import { useContent } from '@/hooks/use-contents'
-import Spinner from '@/components/spinner'
-import Image from 'next/image'
-import useInteractiveImage from '@/hooks/use-animate-image'
 import { SelectUserModel } from '@/db/schema/user'
+import useInteractiveImage from '@/hooks/use-animate-image'
+import { Circle, MapPin } from 'lucide-react'
+import Image from 'next/image'
+import DownloadButton from './button/download'
+import WhatsappdButton from './button/whatsapp'
 
 const TextContent = (content: SelectUserModel) => {
   const { containerRef, handleMouseLeave, handleMouseMove, transform } =

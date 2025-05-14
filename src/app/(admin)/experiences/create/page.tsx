@@ -2,10 +2,8 @@
 import { SelectWorkModel } from '@/db/schema/experiences'
 import { useState } from 'react'
 import ExperiencesForm from './_components/create-experiences-form'
-type Props = {
-  data: SelectWorkModel[]
-}
-export default function CreateExperiences({ data }: Props) {
+
+export default function CreateExperiences() {
   return (
     <div className="mb-10">
       <div className="flex flex-col gap-5">

@@ -1,7 +1,7 @@
 'use server'
 import { db } from '@/db'
 import { work, WorkSchema } from '@/db/schema/experiences'
-import { project, ProjectSchema } from '@/db/schema/project'
+import { project, ProjectSchema, UpdateProject } from '@/db/schema/project'
 import { techstack, TechStackSchema } from '@/db/schema/techstack'
 import { eq } from 'drizzle-orm'
 export async function getUser() {
@@ -44,7 +44,7 @@ export async function updateTechStack(
   await db.update(techstack).set(restData).where(eq(techstack.id, id))
 }
 export async function updateProject(
-  data: Omit<Extract<ProjectSchema, { mode: 'edit' }>, 'mode'>
+  data: Omit<Extract<UpdateProject, { mode: 'edit' }>, 'mode'>
 ) {
   const { id, ...restData } = data
   await db.update(project).set(restData).where(eq(project.id, id))

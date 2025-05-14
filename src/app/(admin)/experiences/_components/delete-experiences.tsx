@@ -22,7 +22,6 @@ export default function DeleteWorkForm({ defaultValues, onCloseModal }: Props) {
     resolver: zodResolver(deleteWorkSchema),
     defaultValues,
   })
-
   const router = useRouter()
   const onSubmit: SubmitHandler<
     Omit<Extract<DeleteWorkData, { mode: 'delete' }>, 'mode'>

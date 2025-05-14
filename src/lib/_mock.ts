@@ -1,5 +1,5 @@
-import { WorkSchema } from '@/db/schema/experiences'
-import { ProjectSchema } from '@/db/schema/project'
+import { UpdateWork, WorkSchema } from '@/db/schema/experiences'
+import { InserProject, ProjectSchema, UpdateProject } from '@/db/schema/project'
 import { TechStackSchema } from '@/db/schema/techstack'
 
 export const mockUserUpdate = () => {
@@ -17,7 +17,7 @@ export const mockUserUpdate = () => {
   return data
 }
 export const mockUpdateWork = () => {
-  const data: Omit<Extract<WorkSchema, { mode: 'edit' }>, 'mode'> = {
+  const data: Omit<Extract<UpdateWork, { mode: 'edit' }>, 'mode'> = {
     id: 'ec3649e3-eea7-4bdd-b469-3ea76e82ecaa',
     startDate: 'October 2030',
     endDate: 'march 2075',
@@ -45,7 +45,7 @@ export const mockUpdateTechstack = () => {
   return data
 }
 export const mockUpdateProject = () => {
-  const data: Omit<Extract<ProjectSchema, { mode: 'edit' }>, 'mode'> = {
+  const data: Omit<Extract<UpdateProject, { mode: 'edit' }>, 'mode'> = {
     id: '0b486ad1-2563-4376-98be-82776f1a548d',
     imageUrl: '/circle.png',
     projectName: 'Circle App',
