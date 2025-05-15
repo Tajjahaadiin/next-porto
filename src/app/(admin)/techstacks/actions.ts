@@ -19,6 +19,7 @@ export async function updateTechStack(
         .where(eq(techstack.id, id))
       console.log('done')
       revalidatePath('/techstacks')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'techstacks updated successfully',
@@ -33,6 +34,7 @@ export async function createTechStack(
       await db.insert(techstack).values(data)
       console.log('done')
       revalidatePath('/techstacks')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'techstacks created successfully',
@@ -47,6 +49,7 @@ export async function deleteTechStack(
       await db.delete(techstack).where(eq(techstack.id, data.id))
       console.log('done')
       revalidatePath('/techstacks')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'techstacks delete successfully',

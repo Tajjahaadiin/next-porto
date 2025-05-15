@@ -19,6 +19,7 @@ export async function updateProject(
       await db.update(project).set(restData).where(eq(project.id, id))
       console.log('done')
       revalidatePath('/projects')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'projects updated successfully',
@@ -33,6 +34,7 @@ export async function createProject(
       await db.insert(project).values(data)
       console.log('done')
       revalidatePath('/projects')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'project created successfully',
@@ -47,6 +49,7 @@ export async function deleteProject(
       await db.delete(project).where(eq(project.id, data.id))
       console.log('done')
       revalidatePath('/projects')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'project deleted successfully',

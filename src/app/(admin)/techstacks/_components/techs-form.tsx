@@ -12,7 +12,7 @@ import { UserSchema } from '@/db/schema/user'
 import { cn } from '@/lib/utils'
 import { toast } from '@/providers/toast-providers'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { HelpCircleIcon, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import { createTechStack, deleteTechStack, updateTechStack } from '../actions'
@@ -126,20 +126,48 @@ export default function TechForm({ defaultValues, onCloseModal }: Props) {
                   onFileSelect={setSelectedFile}
                   initialUrl={form.getValues('techUrl') || ''}
                 />
+
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    'Submit'
+                  )}
+                </Button>
               </>
             )}
             {mode === 'delete' && (
               <>
-                <h2>Are You sure want to delete</h2>
+                <div className="flex justify-center items-center">
+                  <HelpCircleIcon className="size-25 text-destructive" />
+                </div>
+                <h2 className="text-center text-gray-600">
+                  Do You want to delete this data???
+                </h2>
+
+                <div className="flex justify-center gap-5 ">
+                  <Button
+                    variant={'default'}
+                    type="button"
+                    onClick={onCloseModal}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="justify-self-end"
+                    variant={'destructive'}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      'Submit'
+                    )}
+                  </Button>
+                </div>
               </>
             )}
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                'Submit'
-              )}
-            </Button>
           </form>
         </Form>
       </div>

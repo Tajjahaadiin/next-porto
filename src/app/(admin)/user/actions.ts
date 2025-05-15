@@ -13,6 +13,7 @@ export async function updateUser(
       await db.update(user).set(restData).where(eq(user.id, id))
       console.log('done')
       revalidatePath('/user')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'data updated successfully',

@@ -19,6 +19,7 @@ export async function updateExperiences(
       await db.update(work).set(restData).where(eq(work.id, id))
       console.log('done')
       revalidatePath('/experiences')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'experiences updated successfully',
@@ -33,6 +34,7 @@ export async function createExperiences(
       await db.insert(work).values(data)
       console.log('done')
       revalidatePath('/experiences')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'experiences created successfully',
@@ -47,6 +49,7 @@ export async function deleteExperiences(
       await db.delete(work).where(eq(work.id, data.id))
       console.log('done')
       revalidatePath('/experiences')
+      revalidatePath('/')
     },
     isProtected: false,
     clientSuccessMessage: 'experiences deleted successfully',
